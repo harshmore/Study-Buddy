@@ -2,11 +2,14 @@ import os
 import streamlit as st
 from src.config.settings import settings
 from src.utils.helper_functions import rerun
+from src.pages.state import reset_quiz_state
 from src.generator.question_generator import QuestionGenerator
 
 
 def render_quiz_page():
     st.sidebar.subheader("Quiz Settings")
+
+    prev_mode = st.session_state.quiz_source
 
     quiz_mode = st.sidebar.radio(
         "Quiz Source",
@@ -14,9 +17,10 @@ def render_quiz_page():
         index=0 if st.session_state.quiz_source == "topic" else 1,
     )
 
-    st.session_state.quiz_source = (
-        "chat" if quiz_mode == "Chat Conversation" else "topic"
-    )
+    new_mode = "chat" if quiz_mode == "Chat Conversation" else "topic"
+    if new_mode != prev_mode:
+        reset_quiz_state()
+        st.session_state.quiz_source = new_mode
 
     question_type = st.sidebar.selectbox(
         "Select question type",
@@ -37,11 +41,11 @@ def render_quiz_page():
     llm = st.sidebar.selectbox("Model", settings.MODELS, index=len(settings.MODELS) - 1)
 
     if st.sidebar.button("Generate Quiz"):
-        st.session_state.quiz_generated = False
-        st.session_state.quiz_submitted = False
+        # st.session_state.quiz_generated = False
+        # st.session_state.quiz_submitted = False
 
-        for k in ("user_answers", "submitted"):
-            st.session_state.pop(k, None)
+        # for k in ("user_answers", "submitted"):
+        #     st.session_state.pop(k, None)
 
         context = (
             st.session_state.quiz_context

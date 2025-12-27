@@ -4,6 +4,7 @@ from src.config.settings import settings
 from src.utils.helper_functions import rerun
 from src.chat.chat_engine import ChatEngine
 from src.prompts.templates import chat_prompt_template
+from src.pages.state import reset_quiz_state
 
 
 def render_chat_page():
@@ -58,6 +59,7 @@ def render_chat_page():
 
     if st.session_state.quiz_manager.has_meaningful_chat(chat["messages"]):
         if st.button("📝 Create Quiz from this Conversation"):
+            reset_quiz_state()
             st.session_state.quiz_source = "chat"
             st.session_state.quiz_context = (
                 st.session_state.quiz_manager.chat_to_context(chat["messages"])

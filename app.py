@@ -1,7 +1,7 @@
 import streamlit as st
 from dotenv import load_dotenv
-from state import init_session_state
-from navigation import render_sidebar_navigation
+from src.pages.state import init_session_state
+from src.pages.navigation import render_sidebar_navigation
 from src.pages.quiz_page import render_quiz_page
 from src.pages.chat_page import render_chat_page
 
